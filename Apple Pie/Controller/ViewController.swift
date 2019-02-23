@@ -41,7 +41,16 @@ class ViewController: UIViewController {
     }
     
     func newRound() {
-        let newWord = Game.listOfWords.removeFirst()
+        let count = Game.listOfWords.count
+        let index: Int
+        
+        if count < 2 {
+            index = 0
+        } else {
+            index = Int.random(in: 0 ..< count)
+        }
+        
+        let newWord = Game.listOfWords.remove(at: index)
         
         currentGame = Game(
             word: newWord,
@@ -58,12 +67,18 @@ class ViewController: UIViewController {
         
         treeImageView.image = image
         
+        correctWordLabel.text = currentGame.correctWord
+        
         scoreLabel.text = "Выигрыши: \(totalWins), проигрыши: \(totalLosses)"
     }
     
     // MARK: - ... IBAction
     @IBAction func buttonPressed(_ sender: UIButton) {
         sender.isEnabled = false
+        
+        let letter = sender.title(for: .normal)!
+        
+        currentGame.guess(letter: letter)
     }
 }
 
